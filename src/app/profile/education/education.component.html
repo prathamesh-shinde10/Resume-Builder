@@ -1,0 +1,114 @@
+<div class="col-md-8 mx-auto my-5 bg-white shadow-lg rounded p-3">
+    <h2 class="text-center text-primary my-3">
+     Education Details
+    </h2>
+    <hr>
+    
+    <!-- <form [formGroup]="eduform" (ngSubmit)="onSubmit()"> 
+    <div class="px-4 row">
+    
+    <div class="col-md-3">
+    <label for="ql" class="ps-2">Qualification</label>
+    <span class="text-danger">*</span>
+    <input type="text" name="qly" id="ql" formControlName="qly"
+    class="form-control rounded-pill mb-2" 
+    [placeholder]="eduform.get('qly')?.value || 'Enter qualification'"/>
+
+    </div>
+<div class="col-md-3">
+    <label for="sch" class="ps-2">School/College Name</label>
+    <span class="text-danger">*</span>
+    <input type="text" name="clg" id="sch" formControlName="clg"
+    class="form-control rounded-pill mb-2" 
+    [placeholder]="eduform.get('clg')?.value || 'Enter school/college name'"/>
+
+</div>
+<div class="col-md-3">
+    <label for="brd" class="ps-2">Board/University Name</label>
+    <span class="text-danger">*</span>
+    <input type="text" name="uni" id="brd" formControlName="uni"
+    class="form-control rounded-pill mb-2" 
+    [placeholder]="eduform.get('uni')?.value || 'Enter board/university name'"/>
+
+</div>
+<div class="col-md-3">
+    <label for="yr" class="ps-2">Year Of Completion</label>
+    <span class="text-danger">*</span>
+    <input type="month" name="compl" id="yr" formControlName="compl"
+    class="form-control rounded-pill mb-2" 
+    [placeholder]="eduform.get('compl')?.value || 'Enter board/university name'"/>
+</div>
+    </div>
+    <div class="text-center my-3">
+        <button type="submit" class="btn btn-primary me-3" [disabled]="eduform.invalid">Submit</button>
+        <button type="button" class="btn btn-success" (click)="addForm()">Add</button>
+    </div>
+</form> -->
+
+<form [formGroup]="eduform" (ngSubmit)="onSubmit()">
+  <div formArrayName="educationDetails">
+    <!-- Loop through the FormArray -->
+    <div
+      *ngFor="let eduGroup of educationDetails.controls; let i = index"
+      [formGroupName]="i"
+    >
+      <div class="px-4 row">
+        <div class="col-md-2">
+          <label for="ql-{{ i }}" class="ps-2">Qualification</label>
+          <span class="text-danger">*</span>
+          <input
+            type="text"
+            id="ql-{{ i }}"
+            formControlName="qly"
+            class="form-control rounded-pill mb-2"
+            placeholder="Enter qualification"
+          />
+        </div>
+        <div class="col-md-3">
+          <label for="sch-{{ i }}" class="ps-2">School/College Name</label>
+          <span class="text-danger">*</span>
+          <input
+            type="text"
+            id="sch-{{ i }}"
+            formControlName="clg"
+            class="form-control rounded-pill mb-2"
+            placeholder="Enter school/college name"
+          />
+        </div>
+        <div class="col-md-3">
+          <label for="brd-{{ i }}" class="ps-2">Board/University Name</label>
+          <span class="text-danger">*</span>
+          <input
+            type="text"
+            id="brd-{{ i }}"
+            formControlName="uni"
+            class="form-control rounded-pill mb-2"
+            placeholder="Enter board/university name"
+          />
+        </div>
+        <div class="col-md-3">
+          <label for="yr-{{ i }}" class="ps-2">Year Of Completion</label>
+          <span class="text-danger">*</span>
+          <input
+            type="month"
+            id="yr-{{ i }}"
+            formControlName="compl"
+            class="form-control rounded-pill mb-2"
+          />
+        </div>
+        <div class="col-md-1 pt-4">
+          <button type="button" class="btn btn-success" (click)="addForm()">+</button>
+        </div>
+          
+      </div>
+    </div>
+  </div>
+
+  <div class="text-center my-3">
+    <button type="submit"class="btn btn-primary me-3"[disabled]="eduform.invalid">Save</button>
+    <button type="button" class="btn btn-danger rounded" (click)="navigateToSummary()">Next</button>
+      
+  </div>
+</form>
+  
+</div>

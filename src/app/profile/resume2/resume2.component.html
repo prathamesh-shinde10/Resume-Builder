@@ -1,0 +1,65 @@
+<div class="mt-5 mx-auto">
+    <div #resume class="container">
+      <div class="resume">
+        <!-- Header Section -->
+        <div class="header text-center">
+          <h1>{{ personalData?.name || 'John Doe' }}</h1>
+          <p>{{ personalData?.job || 'Web Developer' }}</p>
+          <p>Email: {{ personalData?.email || 'example@gmail.com' }}</p>
+          <p>Phone: {{ personalData?.mob || '+1 234 56789' }}</p>
+        </div>
+   <hr>
+        <!-- Main Content -->
+        <div class="main">
+          <!-- Summary Section -->
+          <section *ngIf="summaryData">
+            <h2>Summary</h2>
+            <p>{{ summaryData }}</p>
+          </section>
+
+
+          <!-- Education Section -->
+    <section class="education" *ngIf="educationData.length > 0">
+        <h2>Education</h2>
+        <div *ngFor="let edu of educationData" class="degree">
+          <h5>{{ edu.qly || 'N/A' }}</h5>
+          <p class="info">
+            {{ edu.clg || 'N/A' }} - {{ edu.uni || 'N/A' }}
+          </p>
+          <p class="year">Completed: {{ edu.compl || 'N/A' }}</p>
+        </div>
+      </section>
+  
+          <!-- Experience Section -->
+          <section class="experience" *ngIf="experienceData.length > 0">
+      <h2>Work Experience</h2>
+      <div *ngFor="let exp of experienceData" class="job">
+        <h5>{{ exp.job || 'N/A' }}</h5>
+        <p class="info">{{ exp.comp || 'N/A' }} | {{ exp.Start || 'N/A' }} - {{ exp.end || 'N/A' }}</p>
+        <p><strong>Address:</strong> {{ exp.adr || 'N/A' }}</p>
+      </div>
+        </section>
+  
+          <!-- Skills Section -->
+          <section *ngIf="skills.length > 0">
+            <h2>Skills</h2>
+            <ul>
+              <li *ngFor="let skill of skills">
+                <strong>{{ skill.skill }}</strong>: {{ skill.per }}%
+              </li>
+            </ul>
+          </section>
+  
+          
+        </div>
+  
+       
+      </div>
+    </div>
+
+     <!-- Download PDF Button -->
+     <div class="text-center my-4">
+        <button type="button" class="btn btn-primary p-2" (click)="downloadPDF()">Download PDF</button>
+      </div>
+    </div>
+  

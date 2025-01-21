@@ -1,0 +1,59 @@
+
+<div class="col-md-5 mx-auto my-5 bg-white shadow-lg rounded p-3">
+    <h2 class="text-center text-primary my-3">
+     Personal Details
+    </h2>
+    <hr>
+    <div class="px-4 ">
+        <form [formGroup]="personalform" (ngSubmit)="onSubmit()"> 
+            <label for="nm" class="ps-2">Enter Name</label>
+            <span class="text-danger">*</span>
+            <input type="text" name="name" id="nm" formControlName="name"
+            class="form-control rounded-pill mb-2" 
+            [placeholder]="personalform.get('name')?.value || 'Enter your name'"/>
+
+            <label for="jb" class="ps-2">Enter Job Title </label>
+            <span class="text-danger">*</span>
+            <input type="text" name="job" id="jb" formControlName="job"
+            class="form-control rounded-pill mb-2"
+            [placeholder]="personalform.get('job')?.value || 'Enter your job title'">
+
+            <label for="ad" class="ps-2">Enter Address</label>
+            <span class="text-danger">*</span>
+            <input type="text" name="add" id="ad" formControlName="add"
+            class="form-control rounded-pill mb-2"
+            [placeholder]="personalform.get('add')?.value || 'Enter your address'">
+
+            <label for="em" class="ps-2">Enter Email</label>
+            <span class="text-danger">*</span>
+            <input type="text" name="email" id="em" formControlName="email"
+            class="form-control rounded-pill mb-2"
+            [placeholder]="personalform.get('email')?.value || 'Enter your email'" >
+
+            <label for="mb" class="ps-2">Enter Mobile Number </label>
+            <span class="text-danger">*</span>
+            <input type="text" name="mob" id="mb" formControlName="mob"
+            class="form-control rounded-pill mb-2"
+            [placeholder]="personalform.get('mob')?.value || 'Enter your mobile number'">
+
+            <label for="li" class="ps-2">Enter Linkedin/Portfolio </label>
+            <span class="text-danger">*</span>
+            <input type="text" name="link" id="li" formControlName="link"
+            class="form-control rounded-pill mb-2"
+            [placeholder]="personalform.get('link')?.value || 'Enter your LinkedIn or portfolio URL'" >
+
+            <!-- <label for="ph" class="ps-2">Upload Photo</label>
+            <span class="text-danger">*</span>
+            <input type="file" name="photo" id="ph" formControlName="photo"
+            class="form-control rounded-pill mb-2"> -->
+
+            <div class="text-center mx-auto my-3">
+                <button type="submit" class="btn btn-primary me-3" [disabled]="personalform.invalid">Save</button>
+                <button type="button" class="btn btn-success me-3" (click)="clearForm()">Clear</button>
+                <button type="button" class="btn btn-danger rounded" (click)="navigateToEducation()">Next</button>
+            </div>
+        </form>
+        <div class="mt-2 text-center">
+        </div>
+    </div>
+</div>

@@ -1,0 +1,56 @@
+<div class="col-md-4 mx-auto my-5 bg-white shadow-lg p-3">
+    <h2 class="text-center text-primary mb-4">
+        Create a New Account
+    </h2>
+    <hr>
+
+    <div class="px-4 ">
+        <form [formGroup]="signupform" (ngSubmit)="Submit()">
+
+            <label for="nm" class="ps-2">Enter Your Name</label>
+            <span class="text-danger">*</span>
+            <input type="text" name="name" id="nm" formControlName="name" class="form-control rounded-pill mb-2">
+            <div *ngIf="signupform.get('name')?.invalid && signupform.get('name')?.touched" class="text-danger">Name is
+                required
+            </div>
+
+            <label for="mb" class="ps-2">Enter Mobile Number</label>
+            <span class="text-danger">*</span>
+            <input type="text" name="mob" id="mb" formControlName="mob" class="form-control rounded-pill mb-2">
+            <div *ngIf="signupform.get('mob')?.invalid && signupform.get('mob')?.touched" class="text-danger"> Mobile
+                Number should be 10 digit
+            </div>
+
+
+            <label for="em" class="ps-2">Enter Your Email </label>
+            <span class="text-danger">*</span>
+            <input type="email" name="email" id="em" formControlName="email" class="form-control rounded-pill mb-2">
+            <div *ngIf="signupform.get('email')?.invalid && 
+       signupform.get('email')?.touched" class="text-danger">
+                Invalid Email Id </div>
+
+
+            <label for="ps" class="ps-2">Enter Password</label>
+            <span class="text-danger">*</span>
+            <input type="text" name="pass" id="ps" formControlName="pass" class="form-control rounded-pill mb-2">
+            <div *ngIf="signupform.get('pass')?.invalid && signupform.get('pass')?.touched" class="text-danger">
+                Password must contain more than 8 characters,one uppercase and one special character.
+            </div>
+
+
+            <div class="text-center my-3">
+                <button type="submit" class="btn btn-primary" [disabled]="signupform.invalid">Sign Up</button>
+            </div>
+        </form>
+        <hr>
+
+
+        <div class="mt-2 text-center">
+
+
+            <a class="text-decoration-none text-danger" (click)="navigateToLogin()">
+                Already have an Account? <span class="text-success">Login</span>
+            </a>
+        </div>
+    </div>
+</div>

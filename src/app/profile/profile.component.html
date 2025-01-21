@@ -1,0 +1,117 @@
+<!-- <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+  <div class="container p-2">
+    
+
+    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+      <ul class="navbar-nav mx-auto">
+        <li class="nav-item">
+          <a routerLink="personal" class="btn btn-primary nav-link text-white me-5 ">
+            Personal Details
+          </a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="edu" class="btn btn-primary nav-link text-white me-5 ">
+            Education
+          </a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="summ" class="btn btn-primary nav-link text-white me-5 ">
+            Summary
+          </a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="exp" class="btn btn-primary  nav-link text-white me-5 ">
+            Experience
+          </a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="skill" class="btn btn-primary nav-link text-white me-5  ">
+            Add Skills
+          </a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="temp" class="btn btn-primary nav-link text-white me-5 ">
+            Download Resume
+          </a>
+        </li>
+        <li class="nav-item">
+          <button class="btn btn-primary nav-link text-white me-5 " (click)="logout()">Logout</button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<div class="col-md-8 row shadow-lg mt-5 mx-auto p-5">
+  
+  <div class="col-md-8">
+    <h2 class="text-danger">Welcome, {{ loggedInUser?.name }}</h2>
+  </div>
+
+</div> -->
+
+
+
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+  <div class="container p-2">
+    <!-- Navbar Toggler -->
+    <button
+      class="navbar-toggler mb-3"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#collapsibleNavbar"
+      aria-controls="collapsibleNavbar"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Navbar Links -->
+    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+      <ul class="navbar-nav mx-auto">
+        <li class="nav-item">
+          <a routerLink="personal" class="btn btn-primary nav-link text-white me-3 ms-3 mb-2 mb-sm-0">
+            Personal Details
+          </a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="edu" class="btn btn-primary nav-link text-white me-3 ms-3 mb-2 mb-sm-0">
+            Education
+          </a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="summ" class="btn btn-primary nav-link text-white me-3 ms-3 mb-2 mb-sm-0">
+            Summary
+          </a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="exp" class="btn btn-primary nav-link text-white me-3 ms-3 mb-2 mb-sm-0">
+            Experience
+          </a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="skill" class="btn btn-primary nav-link text-white me-3 ms-3 mb-2 mb-sm-0">
+            Add Skills
+          </a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="temp" class="btn btn-primary nav-link text-white me-3 ms-3 mb-2 mb-sm-0">
+            Download Resume
+          </a>
+        </li>
+        <li class="nav-item">
+          <button class="btn btn-primary nav-link text-white me-3 ms-3 mb-2 mb-sm-0" (click)="logout()">
+            Logout
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<div class="col-md-8 row shadow-lg mt-5 mx-auto p-5">
+  
+  <div class="col-md-8">
+    <h2 class="text-danger">Welcome, {{ loggedInUser?.name }}</h2>
+  </div>
+
+</div> 

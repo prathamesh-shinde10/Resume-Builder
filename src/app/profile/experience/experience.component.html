@@ -1,0 +1,78 @@
+
+<div class="col-md-8 mx-auto my-5 bg-white shadow-lg rounded p-3">
+    <h2 class="text-center text-primary my-3">
+      Experience
+    </h2>
+    <hr>
+  
+    <form [formGroup]="expform" (ngSubmit)="onSubmit()">
+      <div formArrayName="experienceDetails">
+        <div
+          *ngFor="let expGroup of experienceDetails.controls; let i = index"
+          [formGroupName]="i" >
+          <div class="px-4 row">
+            <div class="col-md-4">
+              <label for="ql-{{ i }}" class="ps-2">Company Name</label>
+              <span class="text-danger">*</span>
+              <input
+                type="text"
+                id="ql-{{ i }}"
+                formControlName="comp"
+                class="form-control rounded-pill mb-2"
+                placeholder="Enter Company Name"/>
+            </div>
+            <div class="col-md-4">
+              <label for="sch-{{ i }}" class="ps-2">Job Title</label>
+              <span class="text-danger">*</span>
+              <input
+                type="text"
+                id="sch-{{ i }}"
+                formControlName="job"
+                class="form-control rounded-pill mb-2"
+                placeholder="Enter Job Title"/>
+            </div>
+            <div class="col-md-4">
+              <label for="brd-{{ i }}" class="ps-2">Company Address</label>
+              <span class="text-danger">*</span>
+              <input
+                type="text"
+                id="brd-{{ i }}"
+                formControlName="adr"
+                class="form-control rounded-pill mb-2"
+                placeholder="Enter Company Address"/>
+            </div>
+          </div>
+          <div class="px-4 row">
+            <div class="col-md-4">
+              <label for="sd-{{ i }}" class="ps-2">Start Date</label>
+              <span class="text-danger">*</span>
+              <input
+                type="month"
+                id="sd-{{ i }}"
+                formControlName="Start"
+                class="form-control rounded-pill mb-2"/>
+            </div>
+            <div class="col-md-4">
+              <label for="ed-{{ i }}" class="ps-2">End Date</label>
+              <span class="text-danger">*</span>
+              <input
+                type="month"
+                id="ed-{{ i }}"
+                formControlName="end"
+                class="form-control rounded-pill mb-2" />
+            </div>
+            <div class="col-md-4 pt-4">
+              <button type="button"class="btn btn-success mx-5" (click)="addForm()">+</button>
+              <button type="button" class="btn btn-warning me-5"(click)="removeForm(i)"[disabled]="experienceDetails.controls.length === 1">-</button>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <div class="text-center my-3">
+        <button type="submit" class="btn btn-primary me-3" [disabled]="expform.invalid">Save</button>
+        <button type="button" class="btn btn-danger rounded"(click)="navigateToSkill()">Next</button>
+      </div>
+    </form>
+  </div>
+  

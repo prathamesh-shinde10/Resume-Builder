@@ -1,0 +1,18 @@
+{
+  "users": [
+    {
+      "id": "6ebd",
+      "name": "Prathamesh Shinde",
+      "mob": "7709998473",
+      "email": "pratham123@gmail.com",
+      "pass": "Pass@123"
+    },
+    {
+      "id": "8b57",
+      "name": "Pranav Yadav",
+      "mob": "9860728626",
+      "email": "pranav123@gmail.com",
+      "pass": "Pass@123"
+    }
+  ]
+}
