@@ -5,7 +5,7 @@
       <h1>{{ personalData.name || 'John Doe' }}</h1>
       <p>{{ personalData.job || 'Web Developer' }}</p>
     </header>
- <hr>
+    <hr>
     <section class="contact" *ngIf="personalData">
       <h2>Contact Information</h2>
       <ul>
@@ -17,10 +17,11 @@
     </section>
 
     <!-- Summary Section -->
-    <section class="summary" *ngIf="summaryData">
+    <section class="summary" *ngIf="summaryText">
       <h2>Summary</h2>
-      <p>{{ summaryData }}</p>
+      <p>{{ summaryText }}</p>
     </section>
+
 
     <!-- Work Experience Section -->
     <section class="experience" *ngIf="experienceData.length > 0">

@@ -1,35 +1,29 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EduService {
+  private apiUrl = 'http://localhost:3000/api/education';
 
-  private sessionStorageKey = 'educationDetails';
+  constructor(private http: HttpClient) {}
 
-  constructor() {}
-
-  // Save education data to session storage
-  saveEducationData(data: any[]): void {
-    try {
-      sessionStorage.setItem(this.sessionStorageKey, JSON.stringify(data));
-    } catch (error) {
-      console.error('Error saving education data:', error);
-    }
+  // Save education data for a specific user
+  saveEducationData(educationData: any[]): Observable<any> {
+    const userId = localStorage.getItem('userId'); // Get logged-in user ID
+    return this.http.post<any>(this.apiUrl, { userId, educationDetails: educationData });
   }
 
-  // Load education data from session storage
-  loadEducationData(): any[] {
-    const savedData = sessionStorage.getItem(this.sessionStorageKey);
-    if (savedData) {
-      try {
-        return JSON.parse(savedData);
-      } catch (error) {
-        console.error('Error parsing saved education data:', error);
-        return [];
-      }
-    }
-    return [];
-  }
+  // Fetch education data for the logged-in user
+  loadEducationData(userId: string): Observable<any[]> {
+  return this.http.get<any[]>(`${this.apiUrl}/${userId}`); 
+}
 
+
+  // Delete specific education entry
+  deleteEducationEntry(id: string): Observable<any> {
+    return this.http.delete<{ success: boolean; message: string }>(`${this.apiUrl}/education/${id}`);
+  }
 }

@@ -1,4 +1,4 @@
-import { Component,OnInit,ElementRef,ViewChild} from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { jsPDF } from 'jspdf';
 import html2canvas from 'html2canvas';
 import { PersonalService } from '../../services/personal.service';
@@ -7,6 +7,7 @@ import { ExperienceService } from '../../services/experience.service';
 import { SkillService } from '../../services/skill.service';
 import { SummaryService } from '../../services/summary.service';
 import { CommonModule } from '@angular/common';
+
 @Component({
   selector: 'app-resume2',
   standalone: true,
@@ -15,6 +16,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './resume2.component.css'
 })
 export class Resume2Component implements OnInit {
+  
   @ViewChild('resume', { static: false }) resumeElement!: ElementRef;
 
   personalData: any;
@@ -22,6 +24,8 @@ export class Resume2Component implements OnInit {
   summaryData: string = '';
   experienceData: any[] = [];
   skills: { skill: string; per: number }[] = [];
+  summaryText: string = 'No summary available.';
+  userId: string | null = null; // Store userId
 
   constructor(
     private personalService: PersonalService,
@@ -32,38 +36,66 @@ export class Resume2Component implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.fetchPersonalData();
-    this.fetchEducationData();
-    this.fetchSummaryData();
+    this.userId = localStorage.getItem('userId'); // Retrieve userId from local storage
+    if (this.userId) {
+      this.fetchPersonalData(this.userId);
+      this.fetchEducationData(this.userId);
+    } else {
+      console.warn('No user logged in.');
+    }
+
+    this.loadSummary();
     this.fetchExperienceData();
     this.skills = this.skillService.getSkills();
 
     console.log('Skills Data:', this.skills); // Debugging - Log skills data
-
   }
 
-  fetchPersonalData(): void {
-    this.personalService.personalData$.subscribe((data) => {
-      if (data) {
-        this.personalData = data;
-      } else {
-        const savedData = sessionStorage.getItem('personalDetails');
-        this.personalData = savedData ? JSON.parse(savedData) : null;
+  fetchPersonalData(userId: string): void {
+    this.personalService.getPersonalDataById(userId).subscribe({
+      next: (response: any) => {
+        console.log('Retrieved personal data:', response);
+  
+        if (response.success && response.data) {
+          this.personalData = response.data;
+          localStorage.setItem('personalDetails', JSON.stringify(this.personalData));
+        } else {
+          console.warn('No personal data found. Checking local storage...');
+          const savedData = localStorage.getItem('personalDetails');
+          this.personalData = savedData ? JSON.parse(savedData) : null;
+        }
+      },
+      error: (err: any) => {
+        console.error('Error fetching personal details:', err);
+      },
+    });
+  }
+
+  fetchEducationData(userId: string): void {
+    this.eduService.loadEducationData(userId).subscribe({
+      next: (data: any) => {
+        this.educationData = data || [];
+        console.log('Fetched Education Data:', this.educationData);
+      },
+      error: (error: any) => {
+        console.error('Error fetching education data:', error);
       }
     });
   }
 
-  fetchEducationData(): void {
-    this.educationData = this.eduService.loadEducationData() || [];
+  loadSummary(): void {
+    this.summaryService.getLatestSummary().subscribe({
+      next: (response: any) => {
+        console.log('Summary Response:', response);
+        this.summaryText = response?.text?.trim() || 'No summary available.';
+      },
+      error: (error: any) => {
+        console.error('Error fetching summary:', error);
+        this.summaryText = 'Failed to load summary. Please try again later.';
+      }
+    });
   }
-
-  fetchSummaryData(): void {
-    this.summaryData = this.summaryService.getSummary() || '';
-    if (!this.summaryData) {
-      this.summaryData = sessionStorage.getItem('summaryData') || '';
-    }
-  }
-
+  
   fetchExperienceData(): void {
     const savedData = this.experienceService.getExperienceData();
     if (savedData && savedData.experienceDetails) {

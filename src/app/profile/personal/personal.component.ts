@@ -16,51 +16,75 @@ export class PersonalComponent implements OnInit {
     name: new FormControl('', [Validators.required, Validators.minLength(4)]),
     job: new FormControl('', [Validators.required]),
     add: new FormControl('', [Validators.required]),
-    email: new FormControl('', [
-      Validators.required,
-      Validators.email,
-      Validators.pattern(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/),
-    ]),
-    mob: new FormControl('', [Validators.required, Validators.pattern('[0-9]{10}'), Validators.maxLength(10)]),
-    link: new FormControl('', [Validators.required,  Validators.minLength(5)]),
-    // photo: new FormControl('', [Validators.required]),
+    email: new FormControl('', [Validators.required, Validators.email]),
+    mob: new FormControl('', [Validators.required, Validators.pattern('[0-9]{10}')]),
+    link: new FormControl('', [Validators.required, Validators.minLength(5)]),
   });
 
- constructor(private router: Router, private personalService: PersonalService) {}
- navigateToEducation() {
-  this.router.navigate(['/profile/edu']);
-}
   
+
+  userId: string = ''; // Stores the logged-in user's ID
+
+  constructor(private router: Router, private personalService: PersonalService) {}
+
   ngOnInit(): void {
-    this.loadFormData();
+    const storedUserId = localStorage.getItem('userId');
+    if (storedUserId) {
+      this.userId = storedUserId;
+      this.loadFormData(this.userId);
+    } else {
+      console.error('No user ID found in localStorage.');
+    }
+  }
+
+  // Load form data from backend for specific user
+  loadFormData(userId: string) {
+    this.personalService.getPersonalDataById(userId).subscribe({
+      next: (response: any) => {
+        console.log('Retrieved personal data:', response);
+        if (response.success && response.data) {
+          this.personalform.patchValue({
+            name: response.data.name || '',
+            job: response.data.job || '',
+            add: response.data.add || '',
+            email: response.data.email || '',
+            mob: response.data.mob || '',
+            link: response.data.link || '',
+          });
+        } else {
+          console.warn('No personal data found.');
+        }
+      },
+      error: (err: any) => {
+        console.error('Error fetching personal details:', err);
+      },
+    });
   }
 
   onSubmit() {
-    if (this.personalform.valid) {
-      const personalDetails = this.personalform.value;
+    if (this.personalform.valid && this.userId) {
+      const personalDetails = { userId: this.userId, ...this.personalform.value };
 
-      // Save form data to session storage
-      sessionStorage.setItem('personalDetails', JSON.stringify(personalDetails));
-
-      // Pass the data to PersonalService
-      this.personalService.updatePersonalData(personalDetails);
-
-      alert('Personal details saved successfully!');
+      this.personalService.submitPersonalData(personalDetails).subscribe({
+        next: (response: any) => {
+          if (response.success) {
+            alert('Personal details saved successfully!');
+            this.loadFormData(this.userId); // Reload data after saving
+            this.router.navigate(['/profile/edu']);
+          } else {
+            alert('Failed to save personal details.');
+          }
+        },
+        error: (err: any) => {
+          console.error('Error:', err);
+          alert('An error occurred while saving personal details.');
+        },
+      });
     } else {
       alert('Please fill in all required fields correctly.');
     }
   }
-
-  loadFormData() {
-    const savedData = sessionStorage.getItem('personalDetails');
-    if (savedData) {
-      this.personalform.setValue(JSON.parse(savedData));
-    }
+  navigateToEducation() {
+    this.router.navigate(['/profile/edu']);
   }
-  clearForm() {
-    this.personalform.reset();
-    sessionStorage.removeItem('personalDetails');
-    alert('Form cleared!');
-  }
-  
 }

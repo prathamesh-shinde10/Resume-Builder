@@ -111,7 +111,9 @@
 <div class="col-md-8 row shadow-lg mt-5 mx-auto p-5">
   
   <div class="col-md-8">
-    <h2 class="text-danger">Welcome, {{ loggedInUser?.name }}</h2>
+    <h2 class="text-danger">Welcome, {{ loggedInUser?.userName || 'Guest' }}</h2>
+   
+
   </div>
 
 </div> 

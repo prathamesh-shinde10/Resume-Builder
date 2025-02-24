@@ -21,36 +21,39 @@ export class SummaryComponent  implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Initialize the form with validation
     this.sumform = this.fb.group({
       txt: ['', [Validators.required, Validators.minLength(100)]]
     });
-
-    // Load saved data from session storage if available
-    const savedData = sessionStorage.getItem('summaryData');
-    if (savedData) {
-      this.sumform.patchValue({ txt: savedData });
-    }
+  
+    this.summaryService.getLatestSummary().subscribe({
+      next: (response) => {
+        this.sumform.patchValue({ txt: response.text });
+      },
+      error: (error) => {
+        console.log('No previous summary found.');
+      }
+    });
   }
-
   // Method to handle form submission
   onSubmit(): void {
     if (this.sumform.valid) {
       const formData = this.sumform.value.txt;
-
-      // Save data to session storage
-      sessionStorage.setItem('summaryData', formData);
-
-      // Save data to service
-      this.summaryService.saveSummary(formData);
-
-      console.log('Form Data Saved:', formData);
-      alert('Data saved successfully!');
+  
+      this.summaryService.saveSummary(formData).subscribe({
+        next: (response) => {
+          console.log('Form Data Saved:', response);
+          alert('Data saved successfully!');
+        },
+        error: (error) => {
+          console.error('Error saving data:', error);
+          alert('Failed to save data.');
+        }
+      });
     } else {
       console.log('Form is invalid!');
     }
   }
-
+  
   // Method to navigate to the experience page
   navigateToExperience(): void {
     this.router.navigate(['/profile/exp']);

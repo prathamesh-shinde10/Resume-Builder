@@ -1,19 +1,22 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PersonalService {
+  private apiUrl = 'http://localhost:3000/api/personal';
 
-  private personalData = new BehaviorSubject<any>(null);
+  constructor(private http: HttpClient) {}
 
-  // Observable for other components to subscribe to
-  personalData$ = this.personalData.asObservable();
+  // Fetch personal data for a specific userId
+  getPersonalDataById(userId: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/${userId}`);
+  }
 
-  // Method to update personal data
-  updatePersonalData(data: any) {
-    this.personalData.next(data);
+  // Submit or update personal details
+  submitPersonalData(personalData: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}`, personalData);
   }
 }
