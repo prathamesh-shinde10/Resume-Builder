@@ -3,16 +3,15 @@ import { Router } from '@angular/router';
 import { EduService } from '../../services/edu.service';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormControl, FormsModule, Validators, FormArray } from '@angular/forms';
-   
 
 interface EducationEntry {
+  id?: string; // Unique ID for existing records
   qly: string;
   clg: string;
   uni: string;
   compl: string;
-  per: string;
+  percentage: string;
 }
-
 
 @Component({
   selector: 'app-education',
@@ -26,18 +25,19 @@ export class EducationComponent implements OnInit {
     educationDetails: new FormArray([])
   });
 
-  userId: string | null = null; // Store userId from localStorage
+  userId: string | null = null;
+  existingEducation: EducationEntry[] = []; // Store fetched data
 
   constructor(private router: Router, private eduService: EduService) {}
 
   ngOnInit(): void {
-    this.userId = localStorage.getItem('userId'); // Get userId from localStorage
+    this.userId = localStorage.getItem('userId'); 
 
     if (this.userId) {
       this.loadEducationData(this.userId);
     } else {
       console.warn('No user logged in. Initializing blank form.');
-      this.addForm(); // Ensure at least one blank form field for new users
+      this.addForm(); 
     }
   }
 
@@ -51,7 +51,7 @@ export class EducationComponent implements OnInit {
       clg: new FormControl('', [Validators.required]),
       uni: new FormControl('', [Validators.required]),
       compl: new FormControl('', [Validators.required]),
-      per: new FormControl('', [Validators.required]),
+      percentage: new FormControl('', [Validators.required]),
     });
     this.educationDetails.push(newEducationForm);
   }
@@ -60,39 +60,34 @@ export class EducationComponent implements OnInit {
     this.educationDetails.removeAt(index);
   }
 
-  onSubmit(): void {
-    if (this.eduform.valid) {
-      const userId = localStorage.getItem('userId'); // Get userId from local storage
-  
-      if (!userId) {
-        alert('User ID not found. Please log in again.');
-        return;
-      }
-  
-      const educationData = this.educationDetails.value.map((entry: any) => ({
-        ...entry,
-        userId // Attach userId to each entry
-      }));
-  
-      this.eduService.saveEducationData(educationData).subscribe({
-        next: () => {
-          alert('Education details saved successfully!');
-          this.loadEducationData(userId); // ✅ Pass userId when calling the function
-        },
-        error: (error) => {
-          console.error('Error saving education data:', error);
-          alert('Failed to save education details. Please try again.');
-        }
-      });
-    } else {
-      alert('Please fill in all required fields.');
+  onSubmit(index: number): void {
+    const userId = localStorage.getItem('userId');
+    if (!userId) {
+      alert('User ID not found. Please log in again.');
+      return;
     }
+  
+    const entry = this.educationDetails.at(index).value as any;
+    const newEntry = { ...entry, percentage: Number(entry.percentage), userId };
+  
+    this.eduService.saveEducationData([newEntry]).subscribe({
+      next: (response) => {
+        alert('Education details saved successfully!');
+        this.loadEducationData(userId); // Refresh the data from the database
+      },
+      error: (error) => {
+        console.error('Error saving education data:', error);
+        alert('Failed to save education details.');
+      }
+    });
   }
+  
   
 
   loadEducationData(userId: string): void {
     this.eduService.loadEducationData(userId).subscribe({
       next: (data) => {
+        this.existingEducation = data; 
         this.educationDetails.clear();
 
         if (data.length > 0) {
@@ -102,26 +97,25 @@ export class EducationComponent implements OnInit {
               clg: new FormControl(education.clg, [Validators.required]),
               uni: new FormControl(education.uni, [Validators.required]),
               compl: new FormControl(education.compl, [Validators.required]),
-              per: new FormControl(education.per, [Validators.required]),
+              percentage: new FormControl(education.percentage, [Validators.required]),
             }));
           });
         } else {
           console.log('No education data found. Initializing blank form.');
-          this.addForm(); // Show a blank form for new users
+          this.addForm();
         }
       },
       error: (error) => {
         console.error('Error fetching education data:', error);
-        this.addForm(); // Ensure at least one empty form if there's an error
+        this.addForm();
       }
     });
   }
 
   removeEducation(index: number): void {
     const entryToDelete = this.educationDetails.at(index).value;
-    
-    if (entryToDelete.id) {
-      // Send request to backend to delete the entry
+  
+    if (entryToDelete.id) { // Only delete from DB if it exists
       this.eduService.deleteEducationEntry(entryToDelete.id).subscribe({
         next: () => {
           this.educationDetails.removeAt(index);
@@ -136,6 +130,7 @@ export class EducationComponent implements OnInit {
       this.educationDetails.removeAt(index);
     }
   }
+  
 
   navigateToSummary() {
     this.router.navigate(['/profile/summ']);

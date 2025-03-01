@@ -60,7 +60,7 @@ export class SignComponent {
       pass: this.signupform.value.pass,
     };
   
-    this.http.post<any>('http://localhost:3000/signup', info, { headers: { 'Content-Type': 'application/json' } })
+    this.http.post<any>('http://localhost:3000/api/signup', info, { headers: { 'Content-Type': 'application/json' } })
       .subscribe({
         next: (response) => {
           if (response.success) {

@@ -1,18 +1,19 @@
-import { Component ,OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { SummaryService } from '../../services/summary.service';
 import { CommonModule } from '@angular/common';
-import { FormBuilder,FormGroup,ReactiveFormsModule,Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-summary',
   standalone: true,
-  imports: [ReactiveFormsModule,CommonModule],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './summary.component.html',
-  styleUrl: './summary.component.css'
+  styleUrls: ['./summary.component.css']
 })
-export class SummaryComponent  implements OnInit {
+export class SummaryComponent implements OnInit {
   sumform!: FormGroup;
+  userId: string | null = null; // Store logged-in user ID
 
   constructor(
     private fb: FormBuilder,
@@ -21,40 +22,55 @@ export class SummaryComponent  implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.userId = localStorage.getItem('userId'); // Retrieve userId from localStorage
+
+    // Initialize form
     this.sumform = this.fb.group({
-      txt: ['', [Validators.required, Validators.minLength(100)]]
+      txt: ['', Validators.required]
     });
-  
-    this.summaryService.getLatestSummary().subscribe({
+
+    // Fetch existing summary if user is logged in
+    if (this.userId) {
+      this.fetchSummary();
+    }
+  }
+
+  fetchSummary(): void {
+    this.summaryService.getLatestSummary(this.userId!).subscribe({
       next: (response) => {
-        this.sumform.patchValue({ txt: response.text });
+        if (response && response.text) {
+          this.sumform.patchValue({ txt: response.text });
+        }
       },
-      error: (error) => {
-        console.log('No previous summary found.');
+      error: () => {
+        console.log('No previous summary found for this user.');
       }
     });
   }
-  // Method to handle form submission
+
   onSubmit(): void {
-    if (this.sumform.valid) {
-      const formData = this.sumform.value.txt;
-  
+    if (this.sumform.valid && this.userId) {
+      const formData = {
+        userId: this.userId, // Include userId in the request
+        text: this.sumform.value.txt
+      };
+
       this.summaryService.saveSummary(formData).subscribe({
         next: (response) => {
-          console.log('Form Data Saved:', response);
-          alert('Data saved successfully!');
+          console.log('Summary saved:', response);
+          alert('Summary saved successfully!');
         },
         error: (error) => {
-          console.error('Error saving data:', error);
-          alert('Failed to save data.');
+          console.error('Error saving summary:', error);
+          alert('Failed to save summary.');
         }
       });
     } else {
-      console.log('Form is invalid!');
+      alert('Please enter a summary before saving.');
     }
   }
-  
-  // Method to navigate to the experience page
+
+  // Navigate to the experience page
   navigateToExperience(): void {
     this.router.navigate(['/profile/exp']);
   }

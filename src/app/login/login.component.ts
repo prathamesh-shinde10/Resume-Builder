@@ -40,7 +40,7 @@ export class LoginComponent {
         password: this.loginForm.value.password!,
       };
   
-      this.http.post<any>('http://localhost:3000/login', loginData, { headers: { 'Content-Type': 'application/json' } })
+      this.http.post<any>('http://localhost:3000/api/login', loginData, { headers: { 'Content-Type': 'application/json' } })
         .subscribe({
           next: (response) => {
             alert(response.message);

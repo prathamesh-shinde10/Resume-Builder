@@ -70,7 +70,7 @@ export class PersonalComponent implements OnInit {
           if (response.success) {
             alert('Personal details saved successfully!');
             this.loadFormData(this.userId); // Reload data after saving
-            this.router.navigate(['/profile/edu']);
+            // this.router.navigate(['/profile/edu']);
           } else {
             alert('Failed to save personal details.');
           }

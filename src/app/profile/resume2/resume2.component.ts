@@ -19,13 +19,12 @@ export class Resume2Component implements OnInit {
   
   @ViewChild('resume', { static: false }) resumeElement!: ElementRef;
 
-  personalData: any;
+  personalData: any = null;
   educationData: any[] = [];
-  summaryData: string = '';
   experienceData: any[] = [];
   skills: { skill: string; per: number }[] = [];
   summaryText: string = 'No summary available.';
-  userId: string | null = null; // Store userId
+  userId: string | null = null;
 
   constructor(
     private personalService: PersonalService,
@@ -36,43 +35,43 @@ export class Resume2Component implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.userId = localStorage.getItem('userId'); // Retrieve userId from local storage
+    this.userId = localStorage.getItem('userId'); // Retrieve userId from storage
+
     if (this.userId) {
-      this.fetchPersonalData(this.userId);
-      this.fetchEducationData(this.userId);
+      this.fetchPersonalData();
+      this.fetchEducationData();
+      this.loadSummary();
+      this.fetchExperienceData();
+      this.skills = this.skillService.getSkills(); // Load skills
     } else {
       console.warn('No user logged in.');
     }
-
-    this.loadSummary();
-    this.fetchExperienceData();
-    this.skills = this.skillService.getSkills();
-
-    console.log('Skills Data:', this.skills); // Debugging - Log skills data
   }
 
-  fetchPersonalData(userId: string): void {
-    this.personalService.getPersonalDataById(userId).subscribe({
+  fetchPersonalData(): void {
+    if (!this.userId) return;
+
+    this.personalService.getPersonalDataById(this.userId).subscribe({
       next: (response: any) => {
-        console.log('Retrieved personal data:', response);
-  
         if (response.success && response.data) {
           this.personalData = response.data;
           localStorage.setItem('personalDetails', JSON.stringify(this.personalData));
         } else {
-          console.warn('No personal data found. Checking local storage...');
+          console.warn('No personal data found. Loading from local storage...');
           const savedData = localStorage.getItem('personalDetails');
           this.personalData = savedData ? JSON.parse(savedData) : null;
         }
       },
       error: (err: any) => {
         console.error('Error fetching personal details:', err);
-      },
+      }
     });
   }
 
-  fetchEducationData(userId: string): void {
-    this.eduService.loadEducationData(userId).subscribe({
+  fetchEducationData(): void {
+    if (!this.userId) return;
+
+    this.eduService.loadEducationData(this.userId).subscribe({
       next: (data: any) => {
         this.educationData = data || [];
         console.log('Fetched Education Data:', this.educationData);
@@ -84,7 +83,9 @@ export class Resume2Component implements OnInit {
   }
 
   loadSummary(): void {
-    this.summaryService.getLatestSummary().subscribe({
+    if (!this.userId) return;
+
+    this.summaryService.getLatestSummary(this.userId).subscribe({
       next: (response: any) => {
         console.log('Summary Response:', response);
         this.summaryText = response?.text?.trim() || 'No summary available.';
@@ -95,29 +96,28 @@ export class Resume2Component implements OnInit {
       }
     });
   }
-  
+
   fetchExperienceData(): void {
     const savedData = this.experienceService.getExperienceData();
-    if (savedData && savedData.experienceDetails) {
-      this.experienceData = savedData.experienceDetails;
-    }
+    this.experienceData = savedData?.experienceDetails || [];
   }
 
   /**
    * Generate and download the resume as a PDF
    */
   downloadPDF(): void {
-    const resume = this.resumeElement.nativeElement; // The resume element
+    const resume = this.resumeElement.nativeElement;
     html2canvas(resume, { scale: 2 }).then((canvas) => {
       const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF('p', 'mm', 'a4'); // Portrait, millimeters, A4 paper
+      const pdf = new jsPDF('p', 'mm', 'a4');
 
       // Calculate dimensions
       const pdfWidth = pdf.internal.pageSize.getWidth();
       const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
 
       pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-      pdf.save('resume.pdf'); // Download the PDF
+      pdf.save('resume.pdf');
     });
   }
+
 }

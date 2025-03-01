@@ -12,18 +12,19 @@ export class EduService {
 
   // Save education data for a specific user
   saveEducationData(educationData: any[]): Observable<any> {
-    const userId = localStorage.getItem('userId'); // Get logged-in user ID
-    return this.http.post<any>(this.apiUrl, { userId, educationDetails: educationData });
+    return this.http.post<any>(this.apiUrl, educationData); 
   }
+  
 
   // Fetch education data for the logged-in user
   loadEducationData(userId: string): Observable<any[]> {
-  return this.http.get<any[]>(`${this.apiUrl}/${userId}`); 
+    return this.http.get<any[]>(`${this.apiUrl}/${userId}`); 
+
 }
 
 
   // Delete specific education entry
   deleteEducationEntry(id: string): Observable<any> {
-    return this.http.delete<{ success: boolean; message: string }>(`${this.apiUrl}/education/${id}`);
+    return this.http.delete<{ success: boolean; message: string }>(`${this.apiUrl}/${id}`);
   }
 }
