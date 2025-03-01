@@ -73,7 +73,7 @@ export class EducationComponent implements OnInit {
     this.eduService.saveEducationData([newEntry]).subscribe({
       next: (response) => {
         alert('Education details saved successfully!');
-        this.loadEducationData(userId); // Refresh the data from the database
+        this.loadEducationData(userId); 
       },
       error: (error) => {
         console.error('Error saving education data:', error);
