@@ -40,11 +40,13 @@ export class ProfileComponent implements OnInit {
       localStorage.removeItem('userId');
       localStorage.removeItem('userEmail');
       localStorage.removeItem('userName');
-
-      alert('You have been logged out.');
+  
       this.router.navigate(['/login']).then(() => {
-        window.location.reload(); // ✅ Force refresh to apply AuthGuard
+        alert('You have been logged out.'); //  Single alert after navigation
+        window.location.reload(); //Force refresh to apply AuthGuard
       });
     }
+  
+  
   }
 }

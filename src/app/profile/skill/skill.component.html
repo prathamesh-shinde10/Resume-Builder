@@ -1,13 +1,13 @@
-
+<!-- 
   <div class="col-md-8 mx-auto my-5 bg-white shadow-lg rounded p-4">
     <h2 class="text-center text-primary my-3">Add Skill</h2>
     <hr>
 
     <form [formGroup]="skillForm" (ngSubmit)="onSubmit()">
-      <!-- Dynamic Skill Rows -->
+      
       <div formArrayName="skillDetails">
         <div *ngFor="let skillGroup of skillDetails.controls; let i = index" [formGroupName]="i" class="row px-4 mb-3">
-          <!-- Skill Input -->
+          
           <div class="col-md-4">
             <label class="ps-2">Enter Skill</label>
             <span class="text-danger">*</span>
@@ -19,7 +19,7 @@
             />
           </div>
 
-          <!-- Percentage Input -->
+         
           <div class="col-md-4">
             <label>Percentage</label>
             <input
@@ -30,26 +30,88 @@
             />
           </div>
 
-          <!-- Add/Buttons -->
+   
           <div class="col-md-4 text-center pt-4">
-            <button
-              type="button"
-              class="btn btn-success"
-              (click)="addSkill()"
-              title="Add Skill">+</button>
+            <button type="button" class="btn btn-primary me-2" title="Save Skill" (click)="saveSkill(i)">
+              Save
+            </button>
+            <button type="button" class="btn btn-warning me-5" (click)="removeForm(i)">-</button>
+   
+
           </div>
         </div>
       </div>
 
-      <!-- Save and Next Buttons -->
+      <hr>
+
+      
       <div class="text-center my-3">
-        <button type="submit" class="btn btn-primary me-2" title="Save Skills" [disabled]="skillForm.invalid">
-          Save
-        </button>
+       
+        <button type="button"class="btn btn-success me-3"(click)="addSkill()" >Add Skill</button>
         <button type="button" class="btn btn-danger" title="Next" (click)="navigateToTemp()">
           Next
         </button>
       </div>
     </form>
   </div>
+ -->
 
+
+ <div class="col-md-8 mx-auto my-5 bg-white shadow-lg rounded p-4">
+  <h2 class="text-center text-primary my-3">Add Skill</h2>
+  <hr>
+
+  <form [formGroup]="skillForm">
+    <!-- Dynamic Skill Rows -->
+    <div formArrayName="skillDetails">
+      <div *ngFor="let skillGroup of skillDetails.controls; let i = index" [formGroupName]="i" class="row px-4 mb-3">
+        <!-- Skill Input -->
+        <div class="col-md-4">
+          <label class="ps-2">Enter Skill</label>
+          <span class="text-danger">*</span>
+          <input
+            type="text"
+            formControlName="skill"
+            class="form-control rounded-pill"
+            placeholder="Enter skill"
+          />
+        </div>
+
+        <!-- Percentage Input -->
+        <div class="col-md-4">
+          <label>Percentage</label>
+          <input
+            type="number"
+            formControlName="per"
+            class="form-control rounded-pill"
+            placeholder="0-100%"
+          />
+        </div>
+
+        <!-- Save & Remove Buttons -->
+        <div class="col-md-4 text-center pt-4">
+          <button type="button" class="btn btn-primary me-2" title="Save Skill" (click)="saveSkill(i)">
+            Save
+          </button>
+          <button type="button" class="btn btn-warning" (click)="removeSkill(i)">
+            Remove
+          </button>
+        </div>
+        
+
+      </div>
+    </div>
+
+    <hr>
+
+    <!-- Add and Next Buttons -->
+    <div class="text-center my-3">
+      <button type="button" class="btn btn-success me-3" (click)="addSkill()">
+        Add Skill
+      </button>
+      <button type="button" class="btn btn-danger" title="Next" (click)="navigateToTemp()">
+        Next
+      </button>
+    </div>
+  </form>
+</div>

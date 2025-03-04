@@ -32,7 +32,7 @@
         <p><strong>Address:</strong> {{ exp.adr || 'N/A' }}</p>
       </div>
     </section>
-
+    
     <!-- Education Section -->
     <section class="education" *ngIf="educationData.length > 0">
       <h2>Education</h2>
@@ -42,6 +42,7 @@
           {{ edu.clg || 'N/A' }} - {{ edu.uni || 'N/A' }}
         </p>
         <p class="year">Completed: {{ edu.compl || 'N/A' }}</p>
+        <p>Percentage: {{ edu.percentage || 'N/A' }}</p>
       </div>
     </section>
 

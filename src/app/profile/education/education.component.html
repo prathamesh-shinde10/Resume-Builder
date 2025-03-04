@@ -1,201 +1,3 @@
-<!-- <div class="col-md-8 mx-auto my-5 bg-white shadow-lg rounded p-3">
-    <h2 class="text-center text-primary my-3">
-     Education Details
-    </h2>
-    <hr>
-    
-   <form [formGroup]="eduform" (ngSubmit)="onSubmit()"> 
-    <div class="px-4 row">
-    
-    <div class="col-md-3">
-    <label for="ql" class="ps-2 form-label fw-bold">Qualification</label>
-    <span class="text-danger">*</span>
-    <input type="text" name="qly" id="ql" formControlName="qly"
-    class="form-control rounded-pill mb-2" 
-    [placeholder]="eduform.get('qly')?.value || 'Enter qualification'"/>
-
-    </div>
-<div class="col-md-3">
-    <label for="sch" class="ps-2">School/College Name</label>
-    <span class="text-danger">*</span>
-    <input type="text" name="clg" id="sch" formControlName="clg"
-    class="form-control rounded-pill mb-2" 
-    [placeholder]="eduform.get('clg')?.value || 'Enter school/college name'"/>
-
-</div>
-<div class="col-md-3">
-    <label for="brd" class="ps-2">Board/University Name</label>
-    <span class="text-danger">*</span>
-    <input type="text" name="uni" id="brd" formControlName="uni"
-    class="form-control rounded-pill mb-2" 
-    [placeholder]="eduform.get('uni')?.value || 'Enter board/university name'"/>
-
-</div>
-<div class="col-md-3">
-    <label for="yr" class="ps-2">Year Of Completion</label>
-    <span class="text-danger">*</span>
-    <input type="month" name="compl" id="yr" formControlName="compl"
-    class="form-control rounded-pill mb-2" 
-    [placeholder]="eduform.get('compl')?.value || 'Enter board/university name'"/>
-</div>
-    </div>
-    <div class="text-center my-3">
-        <button type="submit" class="btn btn-primary me-3" [disabled]="eduform.invalid">Submit</button>
-        <button type="button" class="btn btn-success" (click)="addForm()">Add</button>
-    </div>
-</form> -->
-
-<!-- <form [formGroup]="eduform" (ngSubmit)="onSubmit()">
-  <div formArrayName="educationDetails">
-     Loop through the FormArray
-    <div
-      *ngFor="let eduGroup of educationDetails.controls; let i = index"
-      [formGroupName]="i"
-    >
-      <div class="px-4 row">
-        <div class="col-md-2">
-          <label for="ql-{{ i }}" class="ps-2">Qualification</label>
-          <span class="text-danger">*</span>
-          <input
-            type="text"
-            id="ql-{{ i }}"
-            formControlName="qly"
-            class="form-control rounded-pill mb-2"
-            placeholder="Enter qualification"
-          />
-        </div>
-        <div class="col-md-3">
-          <label for="sch-{{ i }}" class="ps-2">School/College Name</label>
-          <span class="text-danger">*</span>
-          <input
-            type="text"
-            id="sch-{{ i }}"
-            formControlName="clg"
-            class="form-control rounded-pill mb-2"
-            placeholder="Enter school/college name"
-          />
-        </div>
-        <div class="col-md-3">
-          <label for="brd-{{ i }}" class="ps-2">Board/University Name</label>
-          <span class="text-danger">*</span>
-          <input
-            type="text"
-            id="brd-{{ i }}"
-            formControlName="uni"
-            class="form-control rounded-pill mb-2"
-            placeholder="Enter board/university name"
-          />
-        </div>
-        <div class="col-md-3">
-          <label for="yr-{{ i }}" class="ps-2">Year Of Completion</label>
-          <span class="text-danger">*</span>
-          <input
-            type="month"
-            id="yr-{{ i }}"
-            formControlName="compl"
-            class="form-control rounded-pill mb-2"
-          />
-        </div>
-        <div class="col-md-1 pt-4">
-          <button type="button" class="btn btn-success" (click)="addForm()">+</button>
-        </div>
-          
-      </div>
-    </div>
-  </div>
-
-  <div class="text-center my-3">
-    <button type="submit"class="btn btn-primary me-3"[disabled]="eduform.invalid">Save</button>
-    <button type="button" class="btn btn-danger rounded" (click)="navigateToSummary()">Next</button>
-      
-  </div>
-</form>
-  
-</div> -->
-
-
-<!-- 
-
-
-<form [formGroup]="eduform" (ngSubmit)="onSubmit()">
-    <div formArrayName="educationDetails">
-      <div
-        *ngFor="let eduGroup of educationDetails.controls; let i = index"
-        [formGroupName]="i"
-      >
-        <div class="px-4 row ">
-          <div class="col-md-4">
-            <label for="ql-{{ i }}" class="ps-2 form-label fw-bold">Qualification</label>
-            <span class="text-danger">*</span>
-            <input
-              type="text"
-              id="ql-{{ i }}"
-              formControlName="qly"
-              class="form-control rounded-pill mb-2"
-              placeholder="Enter qualification"
-            />
-          </div>
-          <div class="col-md-4">
-            <label for="sch-{{ i }}" class="ps-2 form-label fw-bold">School/College Name</label>
-            <span class="text-danger">*</span>
-            <input
-              type="text"
-              id="sch-{{ i }}"
-              formControlName="clg"
-              class="form-control rounded-pill mb-2"
-              placeholder="Enter school/college name"
-            />
-          </div>
-          <div class="col-md-4">
-            <label for="brd-{{ i }}" class="ps-2 form-label fw-bold">Board/University Name</label>
-            <span class="text-danger">*</span>
-            <input
-              type="text"
-              id="brd-{{ i }}"
-              formControlName="uni"
-              class="form-control rounded-pill mb-2"
-              placeholder="Enter board/university name"
-            />
-          </div>
-        </div>
-          <div class="px-4 row mb-5">
-          <div class="col-md-4">
-            <label for="yr-{{ i }}" class="ps-2 form-label fw-bold">Year Of Completion</label>
-            <span class="text-danger">*</span>
-            <input
-              type="month"
-              id="yr-{{ i }}"
-              formControlName="compl"
-              class="form-control rounded-pill mb-2"
-            />
-          </div>
-          <div class="col-md-4">
-            <label for="per-{{ i }}" class="ps-2 form-label fw-bold">Percentage</label>
-            <span class="text-danger">*</span>
-            <input
-              type="number"
-              id="per-{{ i }}"
-              formControlName="percentage"  
-              class="form-control rounded-pill mb-2"
-              placeholder="Enter percentage"
-            />
-          </div>
-          <div class="col-md-4 pt-4">
-            <button type="submit" class="btn btn-primary  mx-2 mt-2" [disabled]="eduform.invalid" (click)="onSubmit(i)">Save</button>
-            
-            <button *ngIf="educationDetails.length > 1" type="button" class="btn btn-warning mx-3 mt-2" (click)="removeForm(i)">-</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <hr>
-    <div class="text-center my-3">
-      <button type="button" class="btn btn-success me-3" (click)="addForm()">Add Education</button>
-      <button type="button" class="btn btn-danger rounded" (click)="navigateToSummary()">Next</button>
-    </div>
-  </form>
-</div> --> 
-
 
 <div class="col-md-8 mx-auto my-5 bg-white shadow-lg rounded p-3">
   <h2 class="text-center text-primary my-3">Education Details</h2>
@@ -265,7 +67,7 @@
             />
           </div>
           <div class="col-md-4 pt-4">
-            <!-- ✅ Save only this specific entry -->
+            
             <button
               type="button"
               class="btn btn-primary mx-2 mt-2"
@@ -275,14 +77,12 @@
               Save
             </button>
 
-            <!-- ✅ Remove only this specific entry -->
+           
             <button
               *ngIf="educationDetails.length > 1"
               type="button"
               class="btn btn-warning mx-3 mt-2"
-              (click)="removeForm(i)"
-            >
-              -
+              (click)="removeForm(i)">-
             </button>
           </div>
         </div>

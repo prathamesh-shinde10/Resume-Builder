@@ -43,35 +43,48 @@ router.post('/', async (req, res) => {
 
 
 
-// ✅ GET: Fetch education details for a specific user
+//  GET: Fetch education details for a specific user
+
 router.get('/:userId', async (req, res) => {
   try {
     const userId = req.params.userId;
     const educationDetails = await Education.find({ userId });
 
-    res.json(educationDetails.length ? educationDetails : []);
+    //  Ensure ID is returned
+    const formattedEducation = educationDetails.map(entry => ({
+      ...entry.toObject(),
+      id: entry._id.toString() // Ensure `id` is always available
+    }));
+
+    res.json(formattedEducation);
   } catch (error) {
     console.error('Error fetching education data:', error);
     res.status(500).json({ message: 'Server error: ' + error.message });
   }
 });
 
+
 // ✅ DELETE: Remove an education entry
 router.delete('/:id', async (req, res) => {
   try {
     const eduId = req.params.id;
+    console.log(` Deleting entry with ID: ${eduId}`); // 🛠 Debugging
+
     const deletedEducation = await Education.findByIdAndDelete(eduId);
 
     if (!deletedEducation) {
+      console.warn(' Entry not found in DB.');
       return res.status(404).json({ success: false, message: 'Education entry not found' });
     }
 
+    console.log(' Entry deleted from DB:', deletedEducation);
     res.json({ success: true, message: 'Education entry deleted successfully' });
   } catch (error) {
     console.error('Error deleting education:', error);
     res.status(500).json({ success: false, message: 'Server error' });
   }
 });
+
 
 
 module.exports = router;

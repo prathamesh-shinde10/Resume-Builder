@@ -1,24 +1,24 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SkillService {
-  private readonly STORAGE_KEY = 'skillDetails';
+  private apiUrl = 'http://localhost:3000/api/skill';
 
-  // Save skills to session storage
-  saveSkills(data: any[]): void {
-    sessionStorage.setItem(this.STORAGE_KEY, JSON.stringify(data));
+  constructor(private http: HttpClient) {}
+
+  saveSkills(skillsData: { userId: string; skills: any[] }): Observable<any> {
+    return this.http.post<any>(this.apiUrl, skillsData);
   }
 
-  // Retrieve skills from session storage
-  getSkills(): any[] {
-    const savedSkills = sessionStorage.getItem(this.STORAGE_KEY);
-    return savedSkills ? JSON.parse(savedSkills) : [];
+  deleteSkill(skillId: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/delete/${skillId}`);
   }
 
-  // Clear all saved skills from session storage
-  clearSkills(): void {
-    sessionStorage.removeItem(this.STORAGE_KEY);
+  getSkillsByUserId(userId: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/${userId}`);
   }
 }

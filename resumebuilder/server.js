@@ -7,7 +7,9 @@ const { v4: uuidv4 } = require('uuid');
 
 const personalRoutes = require('./routes/personalInfo');
 const educationRoutes = require('./routes/education');
-const summaryRoutes = require('./routes/summary'); // ✅ Keep only this
+const summaryRoutes = require('./routes/summary'); 
+const experienceRoutes = require('./routes/experience'); 
+const skillRoutes = require('./routes/skill'); 
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -20,6 +22,8 @@ app.use(bodyParser.json());
 app.use('/api/personal', personalRoutes);
 app.use('/api/education', educationRoutes);
 app.use('/api/summary', summaryRoutes);
+app.use('/api/experience', experienceRoutes);
+app.use('/api/skill', skillRoutes);
 
 // Connect to MongoDB
 mongoose.connect('mongodb://localhost:27017/builderDB')

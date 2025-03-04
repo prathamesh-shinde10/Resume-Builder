@@ -35,71 +35,119 @@ export class Resume2Component implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.userId = localStorage.getItem('userId'); // Retrieve userId from storage
+    this.userId = localStorage.getItem('userId'); // Retrieve userId
 
-    if (this.userId) {
-      this.fetchPersonalData();
-      this.fetchEducationData();
-      this.loadSummary();
-      this.fetchExperienceData();
-      this.skills = this.skillService.getSkills(); // Load skills
-    } else {
-      console.warn('No user logged in.');
+    if (!this.userId) {
+      console.warn('⚠️ No user logged in.');
+      return;
     }
+
+    console.log('✅ User ID:', this.userId);
+    this.loadUserData();
   }
 
-  fetchPersonalData(): void {
+  /**
+   * Fetch all user-related data (personal, education, experience, skills, summary)
+   */
+  private loadUserData(): void {
+    this.fetchPersonalData();
+    this.fetchEducationData();
+    this.fetchExperienceData();
+    this.fetchSkillData();
+    this.loadSummary();
+  }
+
+  /**
+   * Fetch personal details from the backend or local storage
+   */
+  private fetchPersonalData(): void {
     if (!this.userId) return;
 
     this.personalService.getPersonalDataById(this.userId).subscribe({
-      next: (response: any) => {
-        if (response.success && response.data) {
+      next: (response) => {
+        if (response?.success && response.data) {
           this.personalData = response.data;
           localStorage.setItem('personalDetails', JSON.stringify(this.personalData));
         } else {
-          console.warn('No personal data found. Loading from local storage...');
-          const savedData = localStorage.getItem('personalDetails');
-          this.personalData = savedData ? JSON.parse(savedData) : null;
+          console.warn('⚠️ No personal data found, loading from local storage.');
+          this.personalData = JSON.parse(localStorage.getItem('personalDetails') || 'null');
         }
       },
-      error: (err: any) => {
-        console.error('Error fetching personal details:', err);
-      }
+      error: (err) => console.error('❌ Error fetching personal details:', err)
     });
   }
 
-  fetchEducationData(): void {
+  /**
+   * Fetch education details from the backend
+   */
+  private fetchEducationData(): void {
     if (!this.userId) return;
 
     this.eduService.loadEducationData(this.userId).subscribe({
-      next: (data: any) => {
+      next: (data) => {
         this.educationData = data || [];
-        console.log('Fetched Education Data:', this.educationData);
+        console.log('📚 Education Data:', this.educationData);
       },
-      error: (error: any) => {
-        console.error('Error fetching education data:', error);
-      }
+      error: (error) => console.error('❌ Error fetching education data:', error)
     });
   }
 
-  loadSummary(): void {
+  /**
+   * Fetch experience details from the backend
+   */
+  private fetchExperienceData(): void {
+    if (!this.userId) return;
+
+    this.experienceService.getExperienceData(this.userId).subscribe({
+      next: (response) => {
+        console.log('📡 Experience Data:', response);
+        this.experienceData = response?.experienceDetails || response || [];
+      },
+      error: (error) => console.error('❌ Error fetching experience data:', error)
+    });
+  }
+
+  /**
+   * Fetch skills data from the backend
+   */
+  private fetchSkillData(): void {
+    if (!this.userId) return;
+  
+    this.skillService.getSkillsByUserId(this.userId).subscribe({
+      next: (response: any) => { // Explicitly define response type
+        console.log('🛠️ Skills Data:', response);
+  
+        if (Array.isArray(response)) {
+          this.skills = response; // Directly assign the array
+        } else if (response && typeof response === 'object' && 'skills' in response && Array.isArray(response.skills)) {
+          this.skills = response.skills; // Extract skills if wrapped inside an object
+        } else {
+          this.skills = []; // Default to an empty array
+        }
+      },
+      error: (error) => {
+        console.error('❌ Error fetching skills:', error);
+        this.skills = []; // Ensure skills is always an array
+      }
+    });
+  }
+  
+  /**
+   * Load the latest summary from the backend
+   */
+  private loadSummary(): void {
     if (!this.userId) return;
 
     this.summaryService.getLatestSummary(this.userId).subscribe({
-      next: (response: any) => {
-        console.log('Summary Response:', response);
+      next: (response) => {
+        console.log('📝 Summary Response:', response);
         this.summaryText = response?.text?.trim() || 'No summary available.';
       },
-      error: (error: any) => {
-        console.error('Error fetching summary:', error);
+      error: (error) => {
+        console.error('❌ Error fetching summary:', error);
         this.summaryText = 'Failed to load summary. Please try again later.';
       }
     });
-  }
-
-  fetchExperienceData(): void {
-    const savedData = this.experienceService.getExperienceData();
-    this.experienceData = savedData?.experienceDetails || [];
   }
 
   /**
