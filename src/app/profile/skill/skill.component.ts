@@ -82,19 +82,20 @@
 //   }
 // }
 
+
+
+
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormArray, FormGroup, Validators } from '@angular/forms';
 import { SkillService } from '../../services/skill.service';
 
-
 interface Skill {
   _id: string;
   skill: string;
   per: number;
 }
-
 
 @Component({
   selector: 'app-skill',
@@ -150,9 +151,7 @@ export class SkillComponent implements OnInit {
         this.addSkill(); // Ensure at least one row
       }
     });
-}
-
-  
+  }
 
   get skillDetails(): FormArray {
     return this.skillForm.get('skillDetails') as FormArray;
@@ -161,8 +160,8 @@ export class SkillComponent implements OnInit {
   addSkill(skillData: any = { _id: null, skill: '', per: '' }): void {
     const skillGroup = this.fb.group({
       _id: [skillData._id || null],
-      skill: [skillData.skill || '', Validators.required],
-      per: [skillData.per || 0, [Validators.required, Validators.min(0), Validators.max(100)]]
+      skill: [{ value: skillData.skill || '', disabled: !!skillData._id }, Validators.required], // Disable if saved
+      per: [{ value: skillData.per || 0, disabled: !!skillData._id }, [Validators.required, Validators.min(0), Validators.max(100)]]
     });
     this.skillDetails.push(skillGroup);
   }
@@ -186,7 +185,7 @@ export class SkillComponent implements OnInit {
         this.skillDetails.removeAt(index);
       },
       error: (err) => {
-        console.error(' Error deleting skill:', err);
+        console.error('❌ Error deleting skill:', err);
         alert('Error deleting skill.');
       }
     });
@@ -198,13 +197,15 @@ export class SkillComponent implements OnInit {
       return;
     }
 
-    const { _id, ...skillData } = this.skillDetails.at(index).value;
+    const { _id, ...skillData } = this.skillDetails.at(index).getRawValue();
     console.log('📌 Sending Skill Data:', skillData);
 
     this.skillService.saveSkills({ userId: this.userId, skills: [skillData] }).subscribe({
       next: (response) => {
         alert('Skill saved successfully!');
         this.skillDetails.at(index).patchValue({ _id: response.skill._id });
+        this.skillDetails.at(index).get('skill')?.disable(); // Disable editing
+        this.skillDetails.at(index).get('per')?.disable(); // Disable editing
       },
       error: (err) => {
         console.error('❌ Error saving skill:', err);

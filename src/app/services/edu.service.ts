@@ -49,7 +49,7 @@ interface EducationEntry {
   providedIn: 'root'
 })
 export class EduService {
-  private apiUrl = 'http://localhost:3000/api/education'; // Change this to your actual backend URL
+  private apiUrl = 'http://localhost:3000/api/education'; 
 
   constructor(private http: HttpClient) {}
 
