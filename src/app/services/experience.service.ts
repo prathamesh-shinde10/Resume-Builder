@@ -39,7 +39,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ExperienceService {
-  private apiUrl = 'http://localhost:3000/api/experience';
+  private apiUrl = 'https://resumebuildernode.onrender.com/api/experience';
  
 
   constructor(private http: HttpClient) {}
@@ -47,7 +47,7 @@ export class ExperienceService {
   // Fetch experience data for a user
   getExperienceData(userId: string): Observable<any> {
     console.log('📡 Fetching experience data for:', userId);
-    return this.http.get<any>(`http://localhost:3000/api/experience/${userId}`);
+    return this.http.get<any>(`https://resumebuildernode.onrender.com/api/experience/${userId}`);
   }
   
   

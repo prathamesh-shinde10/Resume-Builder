@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class SkillService {
-  private apiUrl = 'http://localhost:3000/api/skill';
+  private apiUrl = 'https://resumebuildernode.onrender.com/api/skill';
 
   constructor(private http: HttpClient) {}
 

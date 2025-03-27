@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class SummaryService {
-  private apiUrl = 'http://localhost:3000/api/summary'; // Ensure this matches backend
+  private apiUrl = 'https://resumebuildernode.onrender.com/api/summary'; // Ensure this matches backend
 
   constructor(private http: HttpClient) {}
 

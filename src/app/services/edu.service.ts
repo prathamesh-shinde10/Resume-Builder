@@ -49,7 +49,7 @@ interface EducationEntry {
   providedIn: 'root'
 })
 export class EduService {
-  private apiUrl = 'http://localhost:3000/api/education'; 
+  private apiUrl = 'https://resumebuildernode.onrender.com/api/education'; 
 
   constructor(private http: HttpClient) {}
 
